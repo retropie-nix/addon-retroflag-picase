@@ -1,6 +1,10 @@
 rec {
   description = "Retroflag Pi Case addon for retropie-nix";
 
+  inputs = {
+    flake-utils.url = "github:numtide/flake-utils";
+  };
+
   nixConfig = {
     extra-experimental-features = [
       "nix-command"
@@ -16,7 +20,7 @@ rec {
     ];
   };
 
-  outputs = { ... }: {
+  outputs = { flake-utils, ... }: flake-utils.lib.eachSystemPassThrough [ "aarch64-linux" ] (system: {
     nixosModules.default = import ./.;
-  };
+  });
 }

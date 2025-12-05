@@ -1,0 +1,39 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2711";
+
+    /*
+     * This overlay configures GPIO pins to match the RetroFlag Python service.
+     * - GPIO 2 & 3: Inputs with pull-ups to listen for button presses.
+     * - GPIO 4: Output set to HIGH to signal "power on" to the case.
+     */
+    fragment@0 {
+        target = <&gpio>;
+        __overlay__ {
+            retroflag_pins: retroflag_pins {
+                brcm,pins = <2 3 4>;
+
+                /* Pin Functions: 0=Input, 1=Output */
+                brcm,function = <0 0 1>; /* GPIO 2=IN, 3=IN, 4=OUT */
+
+                /* Pull Resistors: 1=Pull-up, 2=Pull-down */
+                brcm,pull = <1 1 0>; /* GPIO 2=PULLUP, 3=PULLUP, 4=NONE */
+            };
+        };
+    };
+
+    /*
+     * This fragment applies the pinctrl and sets the initial
+     * output state for GPIO 4 to HIGH.
+     */
+    fragment@1 {
+        target = <&gpio>;
+        __overlay__ {
+            pinctrl-names = "default";
+            pinctrl-0 = <&retroflag_pins>;
+            gpios = <4 1>; /* Set GPIO 4 to active HIGH */
+        };
+    };
+};

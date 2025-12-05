@@ -1,0 +1,17 @@
+[project]
+name = "retroflag-picase"
+version = "1.0.0"
+description = "Retropie shutdown script for Retroflag NESPi 4 Case"
+
+dependencies = [
+  "RPi.GPIO>=0.7.1",
+]
+
+requires-python = ">=3.12"
+
+[project.scripts]
+retroflag-picase = "service:main"
+
+[build-system]
+requires = ["setuptools>=42", "setuptools_scm", "wheel"]
+build-backend = "setuptools.build_meta"
